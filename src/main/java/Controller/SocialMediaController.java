@@ -51,16 +51,23 @@ public class SocialMediaController {
     private void registerUserHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
 
-        // parsing the req body into an Account obj
-        Account account = mapper.readValue(ctx.body(), Account.class);
-        Account addedAccount = accountService.addAccount(account);
-
-        if (addedAccount != null) {
-            ctx.json(mapper.writeValueAsString(addedAccount));
-        } else {
+        try {
+            // parsing the req body into an Account obj
+            Account account = mapper.readValue(ctx.body(), Account.class);
+            Account addedAccount = accountService.addAccount(account);
+    
+            if (addedAccount != null) {
+                ctx.json(mapper.writeValueAsString(addedAccount));
+            } else {
+                ctx.status(400);
+            }
+        } catch (IllegalArgumentException e) {
             ctx.status(400);
+        } catch (Exception e) {
+            ctx.status(500);
         }
-    }
+
+    } 
 
 
 }

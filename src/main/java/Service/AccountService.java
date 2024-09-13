@@ -28,7 +28,8 @@ public class AccountService {
     }
 
     private void validateAccount(Account account) {
-        if (account.getUsername() == null) {
+        // need to check if it is null but also if it is just empty space string.
+        if (account.getUsername() == null || account.getUsername().trim().length() == 0) {
             throw new IllegalArgumentException("Username cannot be empty");
         }
 

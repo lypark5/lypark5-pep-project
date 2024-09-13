@@ -16,7 +16,7 @@ public class AccountDAO {
     // validation for checking if username already exists in db
     // that is why it must be checked in DAO file, it interacts with db
     public boolean usernameExists(String username) {
-    Connection connection = ConnectionUtil.getConnection();
+        Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "SELECT * FROM account WHERE username = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
