@@ -1,3 +1,5 @@
+// handlers should have void return type
+
 package Controller;
 
 import Model.Account;
@@ -67,10 +69,7 @@ public class SocialMediaController {
             }
         } catch (IllegalArgumentException e) {      // must explicitly catch IllegalArgumentExceptions
             ctx.status(400);
-        } catch (Exception e) {
-            ctx.status(500);
         }
-
     } 
 
 
@@ -90,8 +89,6 @@ public class SocialMediaController {
             }
         } catch (IllegalArgumentException e) {
             ctx.status(401);
-        } catch (Exception e) {
-            ctx.status(500);
         }
     }
 
@@ -102,22 +99,18 @@ public class SocialMediaController {
 
 
     private void getMessageByIdHandler(Context ctx) {
-        try {
-            // parse the messageId from the param
-            int messageId = Integer.parseInt(ctx.pathParam("messageId"));
+        // parse the messageId from the param
+        int messageId = Integer.parseInt(ctx.pathParam("messageId"));
 
-            // fetch message using service
-            Message chosenMessage = messageService.fetchMessageById(messageId);
+        // fetch message using service
+        Message chosenMessage = messageService.fetchMessageById(messageId);
 
-            if (chosenMessage != null) {
-                ctx.json(chosenMessage);
-            } else {
-                // ctx.status(404);         // typo, cannot edit test
-                ctx.status(200);
-            }
-        } catch (Exception e) {
-            ctx.status(500);
-        }
+        if (chosenMessage != null) {
+            ctx.status(200).json(chosenMessage);
+        } else {
+            // ctx.status(404);         // typo, cannot edit test
+            ctx.status(200);
+        } 
     }
 
 

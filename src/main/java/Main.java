@@ -9,6 +9,12 @@ public class Main {
     public static void main(String[] args) {
         SocialMediaController controller = new SocialMediaController();
         Javalin app = controller.startAPI();
+
+        // I am adding a global exception handler here
+        app.exception(Exception.class, (e, ctx) -> {
+            ctx.status(500).json("Internal Server Error: " + e.getMessage());
+        });
+
         app.start(8080);
     }
 }
