@@ -1,3 +1,7 @@
+// DAO is for interacting with db
+// data access layer.
+
+
 package DAO;
 
 import Model.Account;
@@ -11,9 +15,24 @@ import java.util.List;
 public class AccountDAO {
     // validation for checking if username already exists in db
     // that is why it must be checked in DAO file, it interacts with db
-    // public boolean usernameExists(String username) {
-    // Connection connection = ConnectionUtil.getConnection();
-    //}
+    public boolean usernameExists(String username) {
+    Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "SELECT * FROM account WHERE username = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
     
 
     public Account createAccount(Account account) {

@@ -1,3 +1,6 @@
+// Service layer is for business logic and validation logic, 
+// ensures validation before interacting with db in DAO.
+
 package Service;
 
 import Model.Account;
@@ -34,6 +37,8 @@ public class AccountService {
         }
 
         // check if username exists with DAO
-        // if (accountDAO.)
+        if (accountDAO.usernameExists(account.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
     }
 }
