@@ -9,13 +9,16 @@ import java.util.List;
 
 
 public class AccountDAO {
+    // validation for checking if username already exists in db
+    // that is why it must be checked in DAO file, it interacts with db
+    // public boolean usernameExists(String username) {
+    // Connection connection = ConnectionUtil.getConnection();
+    //}
     
 
     public Account createAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection();
         try {
-            // put in checks up here
-
             // creating new account:
             String insertSql = "INSERT INTO account (username, password) VALUES (?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);

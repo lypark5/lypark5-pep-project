@@ -17,6 +17,23 @@ public class AccountService {
     }
     
     public Account addAccount(Account account) {
+        // validate account first
+        validateAccount(account);
+
+        // then make the account
         return accountDAO.createAccount(account);
+    }
+
+    private void validateAccount(Account account) {
+        if (account.getUsername() == null) {
+            throw new IllegalArgumentException("Username cannot be empty");
+        }
+
+        if (account.getPassword().length() < 4) {
+            throw new IllegalArgumentException("Password must be at least 4 characters long");
+        }
+
+        // check if username exists with DAO
+        // if (accountDAO.)
     }
 }
