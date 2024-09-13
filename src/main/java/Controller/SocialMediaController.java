@@ -36,6 +36,7 @@ public class SocialMediaController {
         // app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::registerUserHandler);
         app.post("/login", this::loginUserHandler);
+        app.get("/messages", this::getAllMessagesHandler);
 
 
         return app;
@@ -91,6 +92,10 @@ public class SocialMediaController {
         } catch (Exception e) {
             ctx.status(500);
         }
+    }
+
+    private void getAllMessagesHandler(Context ctx) {
+        ctx.json(messageService.fetchAllMessages());
     }
 
 
