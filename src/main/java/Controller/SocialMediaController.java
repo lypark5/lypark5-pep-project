@@ -35,7 +35,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         // app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::registerUserHandler);
-
+        app.post("/login", this::loginUserHandler);
 
 
         return app;
@@ -54,20 +54,44 @@ public class SocialMediaController {
         try {
             // parsing the req body into an Account obj
             Account account = mapper.readValue(ctx.body(), Account.class);
+            // validate and add the account
             Account addedAccount = accountService.addAccount(account);
     
+            // return the added account as JSON if successful
             if (addedAccount != null) {
                 ctx.json(mapper.writeValueAsString(addedAccount));
             } else {
                 ctx.status(400);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {      // must explicitly catch IllegalArgumentExceptions
             ctx.status(400);
         } catch (Exception e) {
             ctx.status(500);
         }
 
     } 
+
+
+    private void loginUserHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            // parsing the req body into an Account obj
+            Account reqAccount = mapper.readValue(ctx.body(), Account.class);
+            // validate and get account from service
+            Account resAccount = accountService.login(reqAccount.getUsername(), reqAccount.getPassword());
+
+            // return account as JSON if login successful
+            if (resAccount != null) {
+                ctx.json(resAccount);
+            } else {
+                ctx.status(401);
+            }
+        } catch (IllegalArgumentException e) {
+            ctx.status(401);
+        } catch (Exception e) {
+            ctx.status(500);
+        }
+    }
 
 
 }

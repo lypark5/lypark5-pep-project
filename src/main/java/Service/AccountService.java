@@ -19,6 +19,7 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
     
+    // CREATE NEW ACCOUNT
     public Account addAccount(Account account) {
         // validate account first
         validateAccount(account);
@@ -27,6 +28,19 @@ public class AccountService {
         return accountDAO.createAccount(account);
     }
 
+    // LOGIN
+    public Account login(String username, String password) {
+        Account account = accountDAO.getAccountByUsername(username);
+
+        // check if account exists and password matches
+        if (account != null && account.getPassword().equals(password)) {
+            return account;
+        } else {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+    }
+
+    // VALIDATE ACCOUNT
     private void validateAccount(Account account) {
         // need to check if it is null but also if it is just empty space string.
         if (account.getUsername() == null || account.getUsername().trim().length() == 0) {
