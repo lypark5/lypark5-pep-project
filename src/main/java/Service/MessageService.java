@@ -20,4 +20,13 @@ public class MessageService {
     public List<Message> fetchAllMessages() {
         return messageDAO.getAllMessages();
     }
+
+    // GET MESSAGE BY ID
+    // this messageId arg is passed in from the uri path in controller layer.
+    public Message fetchMessageById(int messageId) {
+        // fetch the chosen message using dao.
+        Message chosenMessage = messageDAO.getMessageById(messageId);
+        return chosenMessage;
+    }
+
 }

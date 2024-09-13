@@ -37,6 +37,7 @@ public class SocialMediaController {
         app.post("/register", this::registerUserHandler);
         app.post("/login", this::loginUserHandler);
         app.get("/messages", this::getAllMessagesHandler);
+        app.get("messages/{messageId}", this::getMessageByIdHandler);
 
 
         return app;
@@ -94,8 +95,29 @@ public class SocialMediaController {
         }
     }
 
+
     private void getAllMessagesHandler(Context ctx) {
         ctx.json(messageService.fetchAllMessages());
+    }
+
+
+    private void getMessageByIdHandler(Context ctx) {
+        try {
+            // parse the messageId from the param
+            int messageId = Integer.parseInt(ctx.pathParam("messageId"));
+
+            // fetch message using service
+            Message chosenMessage = messageService.fetchMessageById(messageId);
+
+            if (chosenMessage != null) {
+                ctx.json(chosenMessage);
+            } else {
+                // ctx.status(404);         // typo, cannot edit test
+                ctx.status(200);
+            }
+        } catch (Exception e) {
+            ctx.status(500);
+        }
     }
 
 
