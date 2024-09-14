@@ -138,7 +138,7 @@ public class SocialMediaController {
         } catch (IllegalArgumentException e) {
             ctx.status(400);
         }
-    }
+    } 
 
     private void editMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
