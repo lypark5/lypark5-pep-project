@@ -1,4 +1,6 @@
 // handlers should have void return type
+// JsonProcessingException is usually for serialization of json objects, so 
+// usually for post, put, patch, (delete if involves parsing), usually not for get
 
 package Controller;
 
@@ -12,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.util.List;
+
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -42,6 +44,7 @@ public class SocialMediaController {
         app.get("/messages/{messageId}", this::getMessageByIdHandler);
         app.get("/accounts/{userId}/messages", this::getMessagesOfUserHandler);
         app.post("/messages", this::addMessageHandler);
+        app.delete("/messages/{messageId}", this::removeMessageHandler);
 
 
         return app;
@@ -134,6 +137,20 @@ public class SocialMediaController {
         } catch (IllegalArgumentException e) {
             ctx.status(400);
         }
+    }
+
+    private void removeMessageHandler(Context ctx) throws JsonProcessingException {
+        // parse messageId from param
+        int messageId = Integer.parseInt(ctx.pathParam("messageId"));
+
+        // delete message
+        Message deletedMessage = messageService.removeMessage(messageId);
+
+        if (deletedMessage != null) {
+            ctx.status(200).json(deletedMessage);
+        } else {
+            ctx.status(200);
+        } 
     }
 
 

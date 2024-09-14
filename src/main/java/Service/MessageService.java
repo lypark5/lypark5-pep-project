@@ -64,4 +64,9 @@ public class MessageService {
         return messageDAO.createMessage(message);
     }
 
+    // DELETE MESSAGE
+    public Message removeMessage(int messageId) {
+        return messageDAO.deleteMessage(messageId);
+    }
+
 }

@@ -110,4 +110,30 @@ public class MessageDAO {
 
         return null;
     }
+
+
+    public Message deleteMessage(int messageId) {
+        Connection connection = ConnectionUtil.getConnection();
+        Message deletedMessage = null;          // need this first in case it doesn't exist
+
+        try {
+            // first get the message
+            deletedMessage = getMessageById(messageId);
+
+            // this record exists, so do the following:
+            if (deletedMessage != null) {
+                String sql = "DELETE FROM message WHERE message_id = ?;";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, messageId);
+
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return deletedMessage;
+    }
+
+    
 }
