@@ -49,10 +49,6 @@ public class MessageService {
         if (message.getMessage_text().length() > 255) {
             throw new IllegalArgumentException("Message text cannot be more than 255 characters");
         }
-
-        if (accountDAO.userIdExists(message.getPosted_by()) == false) {
-            throw new IllegalArgumentException("UserId not found");
-        } 
     }
 
     // CREATE MESSAGE
@@ -60,8 +56,27 @@ public class MessageService {
         // validate message first
         validateMessage(message);
 
+        // extra validation for userIdExists
+        if (accountDAO.userIdExists(message.getPosted_by()) == false) {
+            throw new IllegalArgumentException("UserId not found");
+        } 
+
         // then create the message
         return messageDAO.createMessage(message);
+    }
+
+    // UPDATE MESSAGE
+    public Message editMessage(int messageId, Message message) {
+        // validate message first
+        validateMessage(message);
+
+        // extra validation for messageId exists
+        if (fetchMessageById(messageId) == null) {
+            throw new IllegalArgumentException("Invalid message ID");
+        }
+
+        // then edit the message
+        return messageDAO.updateMessage(messageId, message);
     }
 
     // DELETE MESSAGE

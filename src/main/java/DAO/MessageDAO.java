@@ -112,6 +112,28 @@ public class MessageDAO {
     }
 
 
+    public Message updateMessage(int messageId, Message message) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, message.getMessage_text());
+            preparedStatement.setInt(2, messageId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return getMessageById(messageId);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+
     public Message deleteMessage(int messageId) {
         Connection connection = ConnectionUtil.getConnection();
         Message deletedMessage = null;          // need this first in case it doesn't exist

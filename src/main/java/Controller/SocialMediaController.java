@@ -44,6 +44,7 @@ public class SocialMediaController {
         app.get("/messages/{messageId}", this::getMessageByIdHandler);
         app.get("/accounts/{userId}/messages", this::getMessagesOfUserHandler);
         app.post("/messages", this::addMessageHandler);
+        app.patch("/messages/{messageId}", this::editMessageHandler);
         app.delete("/messages/{messageId}", this::removeMessageHandler);
 
 
@@ -134,6 +135,22 @@ public class SocialMediaController {
             // create message
             Message newMessage = messageService.addMessage(message);
             ctx.json(newMessage);
+        } catch (IllegalArgumentException e) {
+            ctx.status(400);
+        }
+    }
+
+    private void editMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        // parse messageId from param
+        int messageId = Integer.parseInt(ctx.pathParam("messageId"));
+
+        try {
+            // parsing the req body into a Message obj
+            Message message = mapper.readValue(ctx.body(), Message.class);
+            // edit message
+            Message editedMessage = messageService.editMessage(messageId, message);
+            ctx.json(editedMessage);
         } catch (IllegalArgumentException e) {
             ctx.status(400);
         }
