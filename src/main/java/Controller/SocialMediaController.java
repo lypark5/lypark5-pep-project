@@ -41,6 +41,7 @@ public class SocialMediaController {
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{messageId}", this::getMessageByIdHandler);
         app.get("/accounts/{userId}/messages", this::getMessagesOfUserHandler);
+        app.post("/messages", this::addMessageHandler);
 
 
         return app;
@@ -119,6 +120,20 @@ public class SocialMediaController {
 
         // just return the list as is, whether empty or not.
         ctx.json(messageService.fetchMessagesOfUser(userId));
+    }
+
+    private void addMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            // parsing the req body into a Message obj
+            Message message = mapper.readValue(ctx.body(), Message.class);
+            // create message
+            Message newMessage = messageService.addMessage(message);
+            ctx.json(newMessage);
+        } catch (IllegalArgumentException e) {
+            ctx.status(400);
+        }
     }
 
 

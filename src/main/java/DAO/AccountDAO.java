@@ -8,8 +8,6 @@ import Model.Account;
 import Util.ConnectionUtil;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class AccountDAO {
@@ -17,6 +15,7 @@ public class AccountDAO {
     // that is why it must be checked in DAO file, it interacts with db
     public boolean usernameExists(String username) {
         Connection connection = ConnectionUtil.getConnection();
+
         try {
             String sql = "SELECT * FROM account WHERE username = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -33,10 +32,32 @@ public class AccountDAO {
 
         return false;
     }
+
+
+    public boolean userIdExists(int userId) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "SELECT * FROM account WHERE account_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
     
 
     public Account createAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection();
+
         try {
             // creating new account:
             String insertSql = "INSERT INTO account (username, password) VALUES (?, ?);";
@@ -61,6 +82,7 @@ public class AccountDAO {
 
     public Account getAccountByUsername(String username) {
         Connection connection = ConnectionUtil.getConnection();
+
         try {
             String sql = "SELECT * FROM account WHERE username = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);

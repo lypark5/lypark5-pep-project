@@ -7,8 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.h2.command.Prepared;
-
 
 public class MessageDAO {
 
