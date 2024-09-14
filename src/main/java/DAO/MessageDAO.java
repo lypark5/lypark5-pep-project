@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.h2.command.Prepared;
+
 
 public class MessageDAO {
 
@@ -57,6 +59,32 @@ public class MessageDAO {
         }
 
         return null;
+    }
+
+
+    public List<Message> getMessagesOfUser(int userId) {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> userMessages = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM message WHERE posted_by = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Message message = new Message(rs.getInt("message_id"),
+                    rs.getInt("posted_by"),
+                    rs.getString("message_text"),
+                    rs.getLong("time_posted_epoch"));
+                userMessages.add(message);
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return userMessages;
     }
 
 

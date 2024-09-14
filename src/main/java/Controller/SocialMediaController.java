@@ -39,7 +39,8 @@ public class SocialMediaController {
         app.post("/register", this::registerUserHandler);
         app.post("/login", this::loginUserHandler);
         app.get("/messages", this::getAllMessagesHandler);
-        app.get("messages/{messageId}", this::getMessageByIdHandler);
+        app.get("/messages/{messageId}", this::getMessageByIdHandler);
+        app.get("/accounts/{userId}/messages", this::getMessagesOfUserHandler);
 
 
         return app;
@@ -108,9 +109,16 @@ public class SocialMediaController {
         if (chosenMessage != null) {
             ctx.status(200).json(chosenMessage);
         } else {
-            // ctx.status(404);         // typo, cannot edit test
             ctx.status(200);
         } 
+    }
+
+    private void getMessagesOfUserHandler(Context ctx) {
+        // parse userId from param
+        int userId = Integer.parseInt(ctx.pathParam("userId"));
+
+        // just return the list as is, whether empty or not.
+        ctx.json(messageService.fetchMessagesOfUser(userId));
     }
 
 

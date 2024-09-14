@@ -24,9 +24,12 @@ public class MessageService {
     // GET MESSAGE BY ID
     // this messageId arg is passed in from the uri path in controller layer.
     public Message fetchMessageById(int messageId) {
-        // fetch the chosen message using dao.
-        Message chosenMessage = messageDAO.getMessageById(messageId);
-        return chosenMessage;
+        return messageDAO.getMessageById(messageId);
+    }
+
+    // GET MESSAGES OF USER
+    public List<Message> fetchMessagesOfUser(int userId) {
+        return messageDAO.getMessagesOfUser(userId);
     }
 
 }
